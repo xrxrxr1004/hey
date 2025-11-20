@@ -5,6 +5,8 @@ const state = {
   chart: null,
 };
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 const elements = {
   dropzone: document.getElementById('dropzone'),
   fileInput: document.getElementById('file-input'),
@@ -150,8 +152,18 @@ const parseFile = async (file) => {
   const buffer = await file.arrayBuffer();
   const workbook = XLSX.read(buffer, { type: 'array' });
   const firstSheetName = workbook.SheetNames[0];
+
+  if (!firstSheetName) {
+    throw new Error('워크북에 시트가 없습니다.');
+  }
+
   const sheet = workbook.Sheets[firstSheetName];
   const rows = XLSX.utils.sheet_to_json(sheet, { defval: null });
+
+  if (!rows.length) {
+    throw new Error('시트에 데이터가 없습니다.');
+  }
+
   analyzeData(rows);
 };
 
@@ -170,10 +182,16 @@ const useDemoData = () => {
 
 const handleFile = (file) => {
   if (!file) return;
+
+  if (file.size > MAX_FILE_SIZE) {
+    alert('파일 크기가 5MB를 초과합니다. 더 작은 파일을 업로드해 주세요.');
+    return;
+  }
+
   elements.fileName.textContent = file.name;
   parseFile(file).catch((err) => {
     console.error(err);
-    alert('파일을 읽는 중 문제가 발생했어요. 파일을 확인해 주세요.');
+    alert(err?.message || '파일을 읽는 중 문제가 발생했어요. 파일을 확인해 주세요.');
   });
 };
 
@@ -193,8 +211,18 @@ const setupDropzone = () => {
   });
 
   elements.dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
     const file = e.dataTransfer.files[0];
     handleFile(file);
+  });
+
+  elements.dropzone.addEventListener('click', () => elements.fileInput.click());
+
+  elements.dropzone.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      elements.fileInput.click();
+    }
   });
 };
 

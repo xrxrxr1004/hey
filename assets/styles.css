@@ -179,6 +179,7 @@ body {
   justify-content: center;
   min-height: 150px;
   transition: border-color 0.2s ease, background 0.2s ease;
+  outline: none;
 }
 
 .dropzone__inner { text-align: center; color: var(--muted); }
@@ -189,6 +190,11 @@ body {
 .dropzone.dragover {
   border-color: var(--accent);
   background: rgba(90, 200, 250, 0.07);
+}
+
+.dropzone:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(90, 200, 250, 0.15);
 }
 
 .metrics {
