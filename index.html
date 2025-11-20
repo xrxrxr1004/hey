@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>데이터 대시보드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero__text">
+        <p class="badge">iOS 16 Inspired</p>
+        <h1>엑셀 데이터를 한눈에</h1>
+        <p class="subtitle">파일을 올리면 요약, 시각화, 미리보기를 즉시 확인하세요.</p>
+        <div class="hero__actions">
+          <label class="button button--primary" for="file-input">엑셀 파일 선택</label>
+          <button class="button" id="demo-button" type="button">데모 데이터 사용</button>
+        </div>
+      </div>
+      <div class="hero__device">
+        <div class="device">
+          <div class="device__notch"></div>
+          <div class="device__screen">
+            <div class="pulse"></div>
+            <div class="device__dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="device__title">데이터 미리보기</div>
+            <div class="device__placeholder">엑셀을 추가하세요</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card dropzone" id="dropzone" role="button" tabindex="0" aria-label="엑셀 파일 업로드">
+        <div class="dropzone__inner">
+          <input type="file" id="file-input" accept=".xlsx,.xls" hidden />
+          <div class="dropzone__icon">⬆︎</div>
+          <div>
+            <p class="dropzone__title">파일을 끌어다 놓거나 선택하세요</p>
+            <p class="dropzone__hint">지원: .xlsx, .xls (최대 5MB 추천)</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="summary">
+        <div class="card__header">
+          <h2>요약</h2>
+          <span class="chip" id="file-name">파일 미선택</span>
+        </div>
+        <div class="metrics" id="metrics"></div>
+      </section>
+
+      <section class="card" id="chart-panel">
+        <div class="card__header">
+          <h2>숫자 컬럼 차트</h2>
+          <select id="column-select" class="select"></select>
+        </div>
+        <canvas id="chart" height="140"></canvas>
+      </section>
+
+      <section class="card" id="preview">
+        <div class="card__header">
+          <h2>테이블 미리보기</h2>
+          <span class="chip" id="row-count">0 행</span>
+        </div>
+        <div class="table-wrapper">
+          <table id="data-table"></table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>
